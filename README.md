@@ -6,7 +6,7 @@ protocol uses four wordings and eight shared seeds per scene, reports correctnes
 alongside finite-grid wording, seed, and nonadditive-residual components, and
 supports crash-safe restart.
 
-This repository is the paper-aligned v0.0.0 release. It contains:
+This repository is the paper-aligned v0.3.0 release. It contains:
 
 - the 96-scene main suite, 16-scene development suite, and four-scene smoke suite;
 - every fixed seed and immutable Hugging Face model revision;
@@ -20,6 +20,12 @@ The published main run contains 11,520 images: 96 scenes × 5 prompts × 8 seeds
 3 pipelines. The human-primary audit contains 1,536 images: 16 complete scenes ×
 4 equivalent wordings × 8 seeds × 3 pipelines. Model weights and generated PNGs
 are intentionally not committed.
+
+## Generated images and results
+
+The generated images and result CSV files are available on Google Drive:
+
+**[ParaSeedBench images and results (Google Drive)](https://drive.google.com/drive/folders/1UBvSSBTKIDd0iMSFtz2bXAFKuAkM4Esu?usp=sharing)**
 
 ## Important v0.3.0 correction
 
@@ -127,7 +133,7 @@ The RTX 3070 has 8 GB VRAM. Use the offload profile for a new full run:
 .\run_v2.ps1 -Config configs\main_v2_rtx3070.lock.yaml
 ```
 
-Do not use the resident RTX 6000 Ada profile on the 3070. CPU/model offload makes
+Do not use the resident RTX 6000 Ada profile on the 3070. CPU/ offload makes
 the 3070 run substantially slower and requires adequate system RAM.
 
 ## Where outputs are saved
@@ -141,7 +147,7 @@ outputs/v2_main_v030_rtx6000ada/
 
 You may change only `output_dir` before starting a new run, including to an
 absolute mounted-drive path. The output location is excluded from experimental
-identity. Do not edit prompts, seeds, model settings, revisions, thresholds, or
+identity. Do not edit prompts, seeds,  settings, revisions, thresholds, or
 source files during a run.
 
 ## Restart after interruption or power loss
