@@ -1,0 +1,33 @@
+{
+  "artifacts": {
+    "audit_metric_summary_sha256": "aab4b8e99e4507f9dbc12f6d4025d353f5ebfb755376698a30b2087395bdb1d2",
+    "evaluator_table_sha256": "d87f8e15ab3cc3f80f1cf794f20d190ccf73cc5bed3ecc0b71350c78d1a8dbe5",
+    "human_table_sha256": "2bdc95ed3217ea1a3da11c17ebb2518208edc4fc773851dcc66dd16cd50eb5cc",
+    "inter_annotator_agreement_sha256": "ecdb8adac8211624d5d0a6c8bd9b08b2a51ab78895a20bd49aaad185b74b10e0",
+    "machine_human_agreement_sha256": "c5a9b464b6acd82ce59c939480b91d453770ce61f551f779d1f70512a1935923",
+    "metric_differences_sha256": "08c0d7f1bbc00e1d27492eb235a67d22619c23c48884a74ab57f65ebd251cae9",
+    "private_key_sha256": "745bdf132dbc7d37f248b57c89b424fe7bc3f7e4295e761bf55627460ae72368"
+  },
+  "atomic_disagreements_between_raters": 144,
+  "automatic_semantic_role": "secondary_diagnostic",
+  "dataset_split": "main",
+  "human_primary_ready": true,
+  "human_semantic_role": "primary",
+  "label_source": "adjudicated_disagreements",
+  "minimum_paper_scenes_per_category": 4,
+  "n_categories": 4,
+  "n_images": 1536,
+  "n_models": 3,
+  "n_scenes": 16,
+  "paper_primary_ready": true,
+  "rater_count": 2,
+  "run_manifest_sha256": "3a21e8203edeacb74293169877db073d06c8c5602c1ccfd18508af0465cb3471",
+  "scenes_per_category": 4,
+  "schema": "paraseedbench-human-audit-2.1",
+  "selection_sha256": "823b3177afaf349da7e42cd4cee7b22941bcb36e326e6d166c25f57e63e7c93b",
+  "source_files": {
+    "adjudication_sha256": "09a148e96ba0e14b92ac1e1ac1dd36d57e33bbdf1de52579adbbd9db4ca0bc76",
+    "rater_a_sha256": "2e037b2acbda95889087118251bec18a48c4684d406846b2f94c3a4aadd2a36c",
+    "rater_b_sha256": "1a2361902fa6068cbf0ff49aee0f34208f6ca0002a2c2c37125ed4f208e744c0"
+  }
+}

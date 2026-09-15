@@ -1,0 +1,9 @@
+{
+  "facebook/dinov2-small": "ed25f3a31f01632728cabb09d1542f84ab7b0056",
+  "google/owlv2-base-patch16-ensemble": "cfd3195ba4ea9592eec887ded089f4c08eff231d",
+  "openai/clip-vit-base-patch32": "3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268",
+  "PixArt-alpha/PixArt-Sigma-XL-2-1024-MS": "e102b3591cc82e97071b8b4cb90d834d0c487207",
+  "PixArt-alpha/PixArt-Sigma-XL-2-512-MS": "76fb7eb5a9314bc1e4e479d2f13447517fca9be4",
+  "stabilityai/stable-diffusion-xl-base-1.0": "462165984030d82259a11f4367a4eed129e94a7b",
+  "stable-diffusion-v1-5/stable-diffusion-v1-5": "451f4fe16113bff5a5d2269ed5ad43b0592e9a14"
+}

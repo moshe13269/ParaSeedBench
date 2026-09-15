@@ -1,0 +1,19 @@
+Published main-run environment facts recovered from the run log
+===============================================================
+
+Operating system: Linux workstation (distribution/version not recovered here)
+Python: 3.10
+PyTorch: 2.14.0+cu130
+PyTorch CUDA runtime: 13.0
+CUDA available: True
+GPU: NVIDIA RTX 6000 Ada Generation
+Reported VRAM: 47.4 GiB
+Original source release: ParaSeedBench v0.2.4
+Original v0.2.4 Python-source hash: 147de68ac48de0c0f4aea04e0f16d6f8389abde77c7a12a5ac47f81727969c27
+
+The original outputs/v2_main_v024_rtx6000ada/run_manifest.json contains the
+complete captured package, CUDA, cuDNN, platform, and source information. That
+file was not among the artifacts available while this Git release was built.
+After workstation access is restored, copy it into
+paper_artifacts/provenance/original_run_manifest.json and run
+python scripts/validate_imported_run.py. Do not invent missing versions.

@@ -1,0 +1,26 @@
+{
+  "bootstrap": 2000,
+  "bootstrap_seed": 2027,
+  "dataset": "data/scenes_v2_main.jsonl",
+  "dataset_split": "main",
+  "images_per_model": {
+    "pixart_sigma": 3840,
+    "sd15": 3840,
+    "sdxl": 3840
+  },
+  "inference": "conditional on tested wordings, seeds, evaluator; no multiplicity-adjusted tests",
+  "models": [
+    "pixart_sigma",
+    "sd15",
+    "sdxl"
+  ],
+  "protocol": "paraseedbench-2.0",
+  "resampling": "within-category scene bootstrap; equal category weights",
+  "scene_count": 96,
+  "scored_images": 11520,
+  "scores_sha256": "bbe8b1907efda74b244ac88f74e12c82c8eec367a5b03e56d5cfce632c76925c",
+  "seed_count": 8,
+  "semantic_label_source": "automatic OWLv2/CLIP evaluator",
+  "semantic_result_role": "secondary diagnostic; human audit is primary",
+  "submission_ready": false
+}

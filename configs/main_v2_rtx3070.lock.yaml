@@ -1,0 +1,75 @@
+protocol: paraseedbench-2.0
+dataset: data/scenes_v2_main.jsonl
+output_dir: outputs/v2_main_v030_rtx3070
+seeds:
+- 11
+- 29
+- 47
+- 71
+- 101
+- 131
+- 173
+- 211
+full_determinism: true
+negative_prompt: ''
+models:
+- name: sd15
+  id: stable-diffusion-v1-5/stable-diffusion-v1-5
+  steps: 30
+  guidance_scale: 7.5
+  height: 512
+  width: 512
+  use_safetensors: true
+  attention_slicing: false
+  vae_slicing: false
+  vae_tiling: false
+  xformers: false
+  offload: model
+  revision: 451f4fe16113bff5a5d2269ed5ad43b0592e9a14
+- name: sdxl
+  id: stabilityai/stable-diffusion-xl-base-1.0
+  variant: fp16
+  steps: 30
+  guidance_scale: 7.5
+  height: 512
+  width: 512
+  use_safetensors: true
+  attention_slicing: false
+  vae_slicing: false
+  vae_tiling: false
+  xformers: false
+  offload: model
+  revision: 462165984030d82259a11f4367a4eed129e94a7b
+- name: pixart_sigma
+  id: PixArt-alpha/PixArt-Sigma-XL-2-512-MS
+  pipeline_id: PixArt-alpha/PixArt-Sigma-XL-2-1024-MS
+  steps: 20
+  guidance_scale: 4.5
+  clean_caption: false
+  height: 512
+  width: 512
+  use_safetensors: true
+  attention_slicing: false
+  vae_slicing: false
+  vae_tiling: false
+  xformers: false
+  offload: sequential
+  revision: 76fb7eb5a9314bc1e4e479d2f13447517fca9be4
+  pipeline_revision: e102b3591cc82e97071b8b4cb90d834d0c487207
+evaluation:
+  detector:
+    id: google/owlv2-base-patch16-ensemble
+    use_fast: false
+    revision: cfd3195ba4ea9592eec887ded089f4c08eff231d
+  color_model:
+    id: openai/clip-vit-base-patch32
+    revision: 3d74acf9a28c67741b2f4f2ea7635f0aaf6f0268
+  embedding_model:
+    id: facebook/dinov2-small
+    use_fast: false
+    revision: ed25f3a31f01632728cabb09d1542f84ab7b0056
+  threshold: 0.1
+  nms_threshold: 0.35
+  relation_margin: 0.03
+  embedding_batch_size: 8
+frozen_dataset_sha256: 027941aebeabf0d544fd0c400abd0e93aa4b966cdcb09ba2fd3e9e475d098bfc

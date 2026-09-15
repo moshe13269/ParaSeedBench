@@ -1,0 +1,13 @@
+{
+  "categories": {
+    "color_binding": 1,
+    "count": 1,
+    "existence": 1,
+    "spatial": 1
+  },
+  "human_prompt_review": "NOT PERFORMED",
+  "scenes": 4,
+  "schema_version": 2,
+  "sha256": "6e367ff1c4c991200bfef7a4edacd5ee25f3c0e3a9f64d9a2b84d02695fd0604",
+  "split": "smoke"
+}

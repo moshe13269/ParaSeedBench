@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use ParaSeedBench, please cite the associated paper and this software release."
+title: "ParaSeedBench: Wording, Seed, and Finite-Grid Nonadditivity in Text-to-Image Evaluation"
+type: software
+version: 0.3.0
+date-released: 2026-09-15
+authors:
+  - family-names: Laufer
+    given-names: Moshe
+    affiliation: Tel Aviv University
+  - family-names: Koenigstein
+    given-names: Noam
+    affiliation: Tel Aviv University
+keywords:
+  - text-to-image generation
+  - robustness evaluation
+  - prompt paraphrases
+  - random seeds
+  - semantic consistency

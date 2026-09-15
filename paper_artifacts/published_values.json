@@ -1,0 +1,56 @@
+{
+  "audit": {
+    "images": 1536,
+    "inter_rater_atomic_accuracy": 0.9481770833333333,
+    "inter_rater_atomic_kappa": 0.8906217794572311,
+    "inter_rater_joint_accuracy": 0.96875,
+    "inter_rater_joint_kappa": 0.9368839533820607,
+    "pre_adjudication_image_state_disagreements": 144
+  },
+  "human_primary": {
+    "pixart_sigma": {
+      "all_wordings_accuracy": 0.4140625,
+      "empirical_worst_accuracy": 0.484375,
+      "heldout_selected_worst_accuracy": 0.5796316964285714,
+      "heldout_selected_worst_ci": [0.5167136346726191, 0.6545786830357142],
+      "mean_accuracy": 0.634765625,
+      "seed_disagreement": 0.20414806547619044,
+      "variance_nonadditive_residual": 0.05194091796875,
+      "variance_seed": 0.037373860677083336,
+      "variance_wording": 0.010233561197916666,
+      "wording_disagreement": 0.1657986111111111
+    },
+    "sd15": {
+      "all_wordings_accuracy": 0.15625,
+      "empirical_worst_accuracy": 0.234375,
+      "heldout_selected_worst_accuracy": 0.3472284226190476,
+      "heldout_selected_worst_ci": [0.2482035900297619, 0.4319986979166666],
+      "mean_accuracy": 0.357421875,
+      "seed_disagreement": 0.3284505208333333,
+      "variance_nonadditive_residual": 0.08316548665364584,
+      "variance_seed": 0.0605316162109375,
+      "variance_wording": 0.018437703450520832,
+      "wording_disagreement": 0.2709418402777778
+    },
+    "sdxl": {
+      "all_wordings_accuracy": 0.1328125,
+      "empirical_worst_accuracy": 0.203125,
+      "heldout_selected_worst_accuracy": 0.3146205357142857,
+      "heldout_selected_worst_ci": [0.24457961309523812, 0.38274646577380933],
+      "mean_accuracy": 0.33203125,
+      "seed_disagreement": 0.3952752976190476,
+      "variance_nonadditive_residual": 0.08335367838541667,
+      "variance_seed": 0.08957926432291667,
+      "variance_wording": 0.015848795572916664,
+      "wording_disagreement": 0.2645399305555555
+    }
+  },
+  "main_grid": {
+    "images": 11520,
+    "models": 3,
+    "scenes": 96,
+    "seeds": [11, 29, 47, 71, 101, 131, 173, 211],
+    "wordings_per_scene": 4
+  },
+  "schema": "paraseedbench-paper-values-1.0"
+}

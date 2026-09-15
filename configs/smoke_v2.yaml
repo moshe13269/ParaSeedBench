@@ -1,0 +1,59 @@
+protocol: paraseedbench-2.0
+dataset: data/scenes_v2_smoke.jsonl
+output_dir: outputs/v2_smoke_v030_rtx6000ada
+seeds:
+- 1009
+- 1013
+full_determinism: true
+negative_prompt: ''
+models:
+- name: sd15
+  id: stable-diffusion-v1-5/stable-diffusion-v1-5
+  steps: 30
+  guidance_scale: 7.5
+  height: 512
+  width: 512
+  use_safetensors: true
+  attention_slicing: false
+  vae_tiling: false
+  xformers: false
+  offload: none
+- name: sdxl
+  id: stabilityai/stable-diffusion-xl-base-1.0
+  variant: fp16
+  steps: 30
+  guidance_scale: 7.5
+  height: 512
+  width: 512
+  use_safetensors: true
+  attention_slicing: false
+  vae_tiling: false
+  xformers: false
+  offload: none
+- name: pixart_sigma
+  id: PixArt-alpha/PixArt-Sigma-XL-2-512-MS
+  pipeline_id: PixArt-alpha/PixArt-Sigma-XL-2-1024-MS
+  steps: 20
+  guidance_scale: 4.5
+  clean_caption: false
+  height: 512
+  width: 512
+  use_safetensors: true
+  attention_slicing: false
+  vae_slicing: false
+  vae_tiling: false
+  xformers: false
+  offload: none
+evaluation:
+  detector:
+    id: google/owlv2-base-patch16-ensemble
+    use_fast: false
+  color_model:
+    id: openai/clip-vit-base-patch32
+  embedding_model:
+    id: facebook/dinov2-small
+    use_fast: false
+  threshold: 0.1
+  nms_threshold: 0.35
+  relation_margin: 0.03
+  embedding_batch_size: 8

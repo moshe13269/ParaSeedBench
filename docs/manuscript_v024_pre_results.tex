@@ -1,0 +1,168 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage{spconf,amsmath,amssymb,booktabs,graphicx,microtype,url}
+\usepackage[hidelinks]{hyperref}
+\title{ParaSeedBench: Wording, Seed, and Interaction Effects in Text-to-Image Evaluation}
+\name{Author list to be confirmed before submission}
+\address{Affiliations and contact details to be confirmed}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\q}{\boldsymbol{q}}
+\newcommand{\normk}[1]{\lVert #1\rVert_K^2}
+\begin{document}
+\maketitle
+\begin{abstract}
+Meaning-equivalent prompts need not produce identical images, and stable semantic failure is not reliability. We cross four wordings with eight shared seeds and exactly decompose finite-grid semantic variation into wording, seed, and interaction components. A 96-scene suite combines correctness, empirical worst-wording performance, counterfactual checks, and correctness-conditioned diversity. A blinded 192-image development audit found that automatic joint labels had 0.781 agreement but only 0.484 recall against one human rater ($\kappa=0.449$); for SDXL, estimated seed disagreement changed from 0.260 automatically to 0.482 manually. We therefore designate adjudicated human states on a prespecified main subset as primary and automatic scores as secondary diagnostics. The checkpointed implementation enforces complete grids, atomic agreement reporting, two-rater adjudication, and immutable run provenance. Main-run results remain required before submission.
+\end{abstract}
+\begin{keywords}
+text-to-image generation, robustness, semantic evaluation, experimental design, reproducibility
+\end{keywords}
+
+\section{Introduction}
+Text-to-image (T2I) generators are stochastic systems: an image depends on both a linguistic conditioning signal and sampled noise. Their evaluation should distinguish variation in requested content from permissible variation in unspecified appearance. Given ``a cat left of a dog,'' a change of background is not necessarily an error, but reversing the relation is. Conversely, consistently omitting the dog is stable failure, not reliable generation.
+
+A common diagnostic fixes the seed and compares images generated from equivalent prompts. Another holds the prompt fixed and changes seeds. These comparisons are useful, but neither alone attributes variation exclusively to wording or noise. A generator may react to a wording only for particular initializations. This interaction affects both comparisons. Moreover, equality of output distributions does not imply pointwise equality under a chosen noise coupling: for symmetric $Z$, the variables $Z$ and $-Z$ have identical distributions although paired realizations differ.
+
+We study a narrow measurement question: \emph{within a specified prompt--seed grid, how much observed semantic variation is associated with wording, seed, and their interaction, and how does each coexist with correctness?} The contribution is an auditable evaluation design, not a new generator or a claim that paraphrase testing itself is novel. We combine an exact descriptive decomposition, accuracy diagnostics, a controlled prompt suite, and a checkpointed implementation with explicit provenance and completeness checks. A development audit further shows why automatic correctness cannot simply be treated as ground truth. Generalization beyond the tested templates, seeds, and pipelines requires further evidence.
+
+\section{Relationship to Prior Evaluation}
+TIFA evaluates faithfulness through visual question answering \cite{tifa}; GenEval evaluates compositional object, count, color, and spatial requirements \cite{geneval}. SemVarBench examines responses to linguistic permutations \cite{semvar}. MetaLogic directly tests logically equivalent prompts and diagnoses object, count, and positional inconsistencies \cite{metalogic}. Thus, equivalent-prompt evaluation and these semantic categories are established ideas. Studies of reliable seeds also demonstrate that initialization can affect compositional performance \cite{seeds}.
+
+Our proposed incremental contribution is a \emph{crossed, correctness-aware analysis of those two axes}, including their interaction. It uses standard finite-table orthogonal decomposition, not a new analysis-of-variance estimator. Its value must be demonstrated through useful diagnostics and agreement with humans. GenEval~2 documents evaluator drift \cite{geneval2}, motivating validation of the entire semantic response grid. Our development audit diagnoses such drift but is not a substitute for main-split human evidence.
+
+\section{Finite-Grid Semantic Analysis}
+\subsection{Experimental unit and correctness}
+Scene $c$ specifies $K_c$ binary visual requirements and $J$ equivalent wordings $p_{cj}$. For each model separately,
+\begin{equation}
+ x_{cjs}=G(p_{cj},z_s),\quad \q^{H}_{cjs},\q^{M}_{cjs}\in\{0,1\}^{K_c}.
+\end{equation}
+Here $H$ denotes the resolved human state and $M$ the OWLv2/CLIP state. The seed is reset for every call; wordings share a random stream within a model. Matching integer seeds across architectures does not align their latent semantics. Unless superscripted, the equations below apply to either label source; confirmatory semantic results use $H$, while $M$ is secondary. Joint correctness is $A_{cjs}=\prod_k q_{cjsk}$.
+
+Two primary descriptive endpoints are mean accuracy and empirical worst-wording accuracy:
+\begin{equation}
+ \bar A=\frac{1}{CJS}\sum_{cjs}A_{cjs},\qquad
+ R_{\rm emp}=\frac1C\sum_c\min_j\frac1S\sum_s A_{cjs}.
+\end{equation}
+$R_{\rm emp}$ is the minimum on a finite observed set, not guaranteed robustness. Even if all wordings have the same true success rate, selecting the lowest sample mean induces downward bias. A scene bootstrap does not remove it. As a sensitivity diagnostic, split the ordered seeds into alternating halves, select the worst wording on one half, score it on the other, and reverse the roles. The resulting held-out selected-worst score reduces reuse of the same outcomes for selection and evaluation but is not an unbiased estimator of the true minimum. We also report the fraction of seeds for which \emph{all} four wordings are correct; this is a different estimand.
+
+\subsection{Wording, seed, and interaction}
+Suppress $c$, define $\normk{v}=K_c^{-1}\sum_k v_k^2$, and let
+\begin{align}
+ \mu&=\frac1{JS}\sum_{js}\q_{js},&
+ a_j&=\frac1S\sum_s\q_{js}-\mu,\nonumber\\
+ b_s&=\frac1J\sum_j\q_{js}-\mu,&
+ r_{js}&=\q_{js}-\mu-a_j-b_s.
+\end{align}
+The finite-grid variation components are
+\begin{align}
+ V_w&=\frac1J\sum_j\normk{a_j},\quad
+ V_s=\frac1S\sum_s\normk{b_s},\nonumber\\
+ V_{ws}&=\frac1{JS}\sum_{js}\normk{r_{js}}.
+\end{align}
+Their sum equals total variation:
+\begin{equation}
+ \frac1{JS}\sum_{js}\normk{\q_{js}-\mu}=V_w+V_s+V_{ws}.
+ \label{eq:partition}
+\end{equation}
+To see this, expand the square. Each row and column mean of $r$ is zero, and $\sum_j a_j=\sum_s b_s=0$; all cross terms vanish. These are exact empirical components, not unbiased population variance estimates. With one image per cell, numerical nondeterminism and judge error cannot be separately estimated as residual noise.
+
+For binary states, normalized Hamming distance equals squared distance under $\normk{\cdot}$. Define $D_w$ as the mean Hamming distance across unordered wording pairs at each seed, and $D_s$ across unordered seed pairs at each wording. The pairwise-distance identity gives
+\begin{equation}
+ D_w=\frac{2J}{J-1}(V_w+V_{ws}),\qquad
+ D_s=\frac{2S}{S-1}(V_s+V_{ws}).
+ \label{eq:disagreement}
+\end{equation}
+Thus interaction contributes to both; comparing their raw magnitudes also involves different finite-size factors. All components are first computed per scene, then averaged with equal category weights. Low variation is interpreted jointly with accuracy, never as success on its own.
+
+\begin{table}[t]
+\centering\caption{Analytical one-atom $2\times2$ examples, not model measurements. Entries of $q$ are arranged as wording rows and seed columns.}
+\begin{tabular}{@{}lccccc@{}}\toprule
+$q$ & $\bar A$ & $V_w$ & $V_s$ & $V_{ws}$ & $(D_w,D_s)$\\\midrule
+$(0,0;0,0)$ & 0 & 0 & 0 & 0 & $(0,0)$\\
+$(1,1;1,1)$ & 1 & 0 & 0 & 0 & $(0,0)$\\
+$(0,0;1,1)$ & .5 & .25 & 0 & 0 & $(1,0)$\\
+$(0,1;1,0)$ & .5 & 0 & 0 & .25 & $(1,1)$\\\bottomrule
+\end{tabular}\label{tab:analytical}
+\end{table}
+
+\subsection{Diversity and distributional diagnostics}
+For normalized DINOv2 features $f(x)$ \cite{dinov2}, compute $1-f(x)^\top f(x')$ between different seeds of the same wording, restricted to pairs whose images both pass all atoms. Average pairs within an eligible wording, eligible wordings within a scene, and eligible scenes within each category. Report all eligible counts. Undefined values remain undefined; a category without eligible scenes prevents an overall category-balanced summary. This selection depends on the generator and judge, so different models need not be evaluated on the same subset. Larger distance is not inherently better image quality, and DINO does not isolate only unspecified attributes.
+
+An exploratory summary compares wording-specific distributions over all $2^{K_c}$ binary states using mean pairwise base-2 Jensen--Shannon divergence, with $1/2$ added to \emph{every} state count. Smoothing and eight samples make this strongly sample-size dependent. It is neither a test of distributional equivalence nor evidence from a seed-inaccessible API. Such an API study is outside the implemented experiment.
+
+\section{Versioned Benchmark Protocol}
+\subsection{Scenes and data boundaries}
+Version~2 contains 96 scenes, 24 per category: object existence, exact count, color binding, and spatial relation. Each has four wordings and one meaning-changing control. Two cyclic pairings over 12 concrete nouns replace lexicographically truncated pairs. Counts two, three, and four each appear in eight scenes. All variants request a photograph; spatial paraphrases preserve relative position without introducing sitting or absolute image-edge constraints. Color and spatial prompts explicitly require exactly one instance of each queried object, resolving the evaluator's highest-confidence-instance ambiguity. Other unrequested objects are allowed.
+
+There are 16 separate development scenes using four additional object nouns; a four-scene smoke subset is drawn from these, not from the main set. Main and development semantic specifications are disjoint, including controls. Different development nouns introduce a calibration-domain limitation. Within the main set, count controls can reproduce another base count, and shared templates limit population-level interpretation. The reported development audit did not justify evaluator calibration, so thresholds remain declared defaults. Main images cannot guide prompts or thresholds. Two reviewers must check all intended prompt equivalences before the main configuration is frozen; that review remains pending.
+
+\subsection{Generators and execution contract}
+The controlled $512\times512$ study includes Stable Diffusion~1.5 \cite{ldm}, SDXL-base \cite{sdxl}, and PixArt-$\Sigma$ \cite{pixart}, with respectively 30/30/20 steps and guidance 7.5/7.5/4.5. PixArt uses the 512-MS denoising transformer with the T5, VAE, tokenizer, and scheduler components from its complete 1024-MS Diffusers pipeline; both repository commits are pinned. The scheduler configuration is saved. These settings define operational pipelines, not compute-matched or best-quality model comparisons. In particular SDXL's lower-than-preferred resolution requires a separate native-resolution sensitivity experiment before broader ranking claims.
+
+The seed list is $[11,29,47,71,101,131,173,211]$, shared across wordings. A fresh CPU generator is created for every call. FP16 generation, batch size one, disabled TF32, deterministic PyTorch algorithms, fixed negative prompt, and immutable checkpoint commits define the run. PixArt caption cleaning is disabled explicitly. Model-native safety filtering is retained; flagged and all-black outputs are recorded separately and assigned zero correctness for \emph{end-to-end pipeline} accuracy. The uncensored subset is reported only descriptively. Rerolling flagged seeds or silently discarding them would change the sampling design.
+
+The main grid contains $96\times5\times8=3840$ images per model, or 11,520 total. The RTX~6000 Ada profile keeps models resident on GPU; the RTX~3070 profile offloads components to CPU. These are separate execution profiles. Neither runtime nor cross-platform numerical equivalence is assumed. Package versions, source hash, GPU model, CUDA/cuDNN, elapsed generation time, and peak allocated memory are recorded. Resumption rejects changed run contracts. A same-process duplicate-input check covers one base scene per category and model; it does not establish cross-device or cross-process determinism.
+
+\subsection{Secondary automatic evaluator and controls}
+The evaluator uses OWLv2-base-patch16-ensemble \cite{owlv2} and CLIP ViT-B/32 \cite{clip} in FP32, pinned to immutable revisions. OWLv2 and DINOv2 use explicitly selected slow processors rather than version-dependent defaults. Thresholds 0.10 for detection and 0.35 for class-wise NMS are declared defaults, not validated optima. Color is classified among ten alternatives using the highest-scoring object's box with 3\% padding. Spatial predicates use centroids with a 0.03 image-width/height dead zone. Missing objects fail dependent atoms; exact-one atoms fail when extra queried instances are detected. Correlated detection, color, and boundary errors motivate its secondary status.
+
+For count, color, and spatial controls, evaluate each base/control image against \emph{both} specifications. A paired discrimination success requires each image to satisfy its own specification and fail the alternative. Presence replacement is non-exclusive: an image can satisfy both prompts. It therefore receives own-prompt accuracy but no exclusive-discrimination score. All controls are excluded from the main variation decomposition.
+
+\section{Human-primary Validation and Reporting}
+\IfFileExists{generated/human_primary_results_v2.tex}{%
+\begin{table*}[t]\centering
+\caption{Primary results from the resolved two-rater main audit; brackets are 95\% category-stratified scene-bootstrap intervals.}
+\input{generated/human_primary_results_v2.tex}
+\end{table*}}{}
+\IfFileExists{generated/evaluator_agreement_v2.tex}{%
+\begin{table}[t]\centering
+\caption{Secondary automatic evaluator versus resolved human states on the same main grids. Exact state requires agreement on every atom.}
+\input{generated/evaluator_agreement_v2.tex}
+\end{table}}{}
+
+\subsection{Prespecified main audit}
+Uniformly sample four base scenes per category, independently of scores, and retain all four wordings, eight seeds, and three models: 1,536 images per annotator. Neutral identifiers hide model and machine labels. Two annotators independently label every atom. Any unequal atomic strings enter a blinded adjudication queue; joint correctness alone cannot resolve them. Primary accuracy and variation metrics are reconstructed from resolved human states on these complete grids. Automatic results over all 96 scenes remain secondary diagnostics.
+
+Report joint and atomic-bit accuracy, recall, specificity, balanced accuracy, $\kappa$, exact-state agreement, inter-annotator agreement, and paired machine--human metric changes. The implementation refuses paper export without two raters, resolved disagreements, a main-split audit, and at least four scenes per category. Sixteen scene clusters still limit precision; the target is conditional on this audited subset.
+
+\subsection{Development audit}
+One blinded annotator labeled all atoms for 192 development images (two scenes/category, four wordings, two seeds, three models). Table~\ref{tab:dev} shows that raw agreement can conceal low sensitivity. Overall joint agreement was 0.781, but recall was 0.484 and $\kappa=0.449$. Recall was 0.231 for count and 0.385 for spatial relations; existence recall was 0.905. Only two color-binding grids were human-positive, both missed automatically, so its apparent 0.958 agreement is non-informative about sensitivity.
+
+\begin{table}[t]
+\centering\caption{One-rater development audit (64 images/model). $H/M$: human/automatic mean joint accuracy.}\label{tab:dev}
+\begin{tabular}{@{}lcccc@{}}\toprule
+Model & $H$ & $M$ & Recall & $\kappa$\\\midrule
+PixArt-$\Sigma$ & .578 & .359 & .486 & .282\\
+SD 1.5 & .234 & .203 & .600 & .544\\
+SDXL & .156 & .063 & .300 & .373\\\bottomrule
+\end{tabular}
+\end{table}
+
+The mean-accuracy order was unchanged, but variation conclusions were not: human wording disagreement ordered SD~1.5 (.317), SDXL (.293), then PixArt-$\Sigma$ (.227), whereas automatic labels reversed the extremes. SDXL seed disagreement was .482 manually and .260 automatically. Because this diagnostic has one rater and eight scenes, it neither establishes population rankings nor tunes thresholds; it establishes the need for human-primary reporting.
+
+\subsection{Uncertainty and empirical status}
+Use 2,000 bootstrap replicates that resample scenes within category; paired model and machine--human differences reuse scene units. Categories receive equal weight. Intervals remain conditional on selected scenes, seeds, and templates; they do not remove empirical-minimum bias or cover unseen seeds. Secondary intervals are descriptive without multiplicity adjustment.
+
+No completed main-run outputs or resolved two-rater main audit were supplied for this revision. The software emits primary LaTeX results only after the audit gate passes and separately retains automatic tables, per-scene components, censoring, diversity eligibility, controls, and runtime. Final interpretation must report human mean and empirical worst-wording accuracy, $V_w,V_s,V_{ws}$, held-out selected-worst sensitivity, and rater/evaluator agreement. Examples must use disclosed selection rules; no reversal may be sought after observing outputs.
+
+\section{Limitations and Conclusion}
+The suite measures simple, templated photographic compositions rather than unrestricted intent. Components depend on the selected wording/seed set, and primary labels retain human subjectivity despite independent rating and adjudication. The main audit samples only part of the suite. Safety behavior differs by pipeline, DINO diversity is selection-dependent, and equal output resolution is not equal native capability. No claim of novelty over existing paraphrase benchmarks follows from dataset size or a crossed table alone.
+
+ParaSeedBench offers a concrete distinction: paired wording and seed disagreements both contain interaction, while stability itself says nothing about correctness. The development audit shows that an automatic judge can also alter the apparent source of instability. The revised protocol makes human states primary, preserves automatic scoring as a scalable diagnostic, and blocks paper export until independent labels are resolved. Demonstrating practical significance still requires the main experiment and comparison with simpler accuracy/disagreement reporting.
+
+\clearpage
+\ifnum\value{page}>5\PackageError{ParaSeedBench}{Technical content exceeds four pages}{Shorten the technical body; do not shrink below the permitted font size.}\fi
+\begin{thebibliography}{13}
+\bibitem{tifa} Y. Hu et al., ``TIFA: Accurate and interpretable text-to-image faithfulness evaluation with question answering,'' in \emph{Proc. ICCV}, 2023.
+\bibitem{geneval} D. Ghosh et al., ``GenEval: An object-focused framework for evaluating text-to-image alignment,'' in \emph{Proc. NeurIPS}, 2023.
+\bibitem{semvar} X. Zhu et al., ``Evaluating semantic variation in text-to-image synthesis: A causal perspective,'' in \emph{Proc. ICLR}, 2025, arXiv:2410.10291.
+\bibitem{metalogic} Y. Shen, Y. Shu, H.-Y. Paik, and Y. Sui, ``MetaLogic: Robustness evaluation of text-to-image models via logically equivalent prompts,'' arXiv:2510.00796, 2025.
+\bibitem{seeds} S. Li, H. Le, J. Xu, and M. Salzmann, ``All seeds are not equal: Enhancing compositional text-to-image generation with reliable random seeds,'' in \emph{Proc. ICLR}, 2025, arXiv:2411.18810.
+\bibitem{geneval2} A. Kamath et al., ``GenEval 2: Addressing benchmark drift in text-to-image evaluation,'' arXiv:2512.16853, 2025.
+\bibitem{dinov2} M. Oquab et al., ``DINOv2: Learning robust visual features without supervision,'' arXiv:2304.07193, 2023.
+\bibitem{ldm} R. Rombach et al., ``High-resolution image synthesis with latent diffusion models,'' in \emph{Proc. CVPR}, 2022.
+\bibitem{sdxl} D. Podell et al., ``SDXL: Improving latent diffusion models for high-resolution image synthesis,'' arXiv:2307.01952, 2023.
+\bibitem{pixart} J. Chen et al., ``PixArt-$\Sigma$: Weak-to-strong training of diffusion transformer for 4K text-to-image generation,'' arXiv:2403.04692, 2024.
+\bibitem{owlv2} M. Minderer, A. Gritsenko, and N. Houlsby, ``Scaling open-vocabulary object detection,'' arXiv:2306.09683, 2023.
+\bibitem{clip} A. Radford et al., ``Learning transferable visual models from natural language supervision,'' in \emph{Proc. ICML}, 2021.
+\end{thebibliography}
+% Add only factually verified funding/ethics statements; author information must be completed.
+\end{document}

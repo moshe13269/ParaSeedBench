@@ -1,0 +1,4 @@
+labels,model,metric,estimate,ci_low,ci_high,n_scenes,bootstrap,bootstrap_seed,split_rule
+human_primary,pixart_sigma,heldout_selected_worst_accuracy,0.5796316964285714,0.5167136346726191,0.6545786830357142,16,2000,2027,all unordered balanced seed splits; reverse halves; average ties
+human_primary,sd15,heldout_selected_worst_accuracy,0.3472284226190476,0.2482035900297619,0.4319986979166666,16,2000,2027,all unordered balanced seed splits; reverse halves; average ties
+human_primary,sdxl,heldout_selected_worst_accuracy,0.3146205357142857,0.24457961309523812,0.38274646577380933,16,2000,2027,all unordered balanced seed splits; reverse halves; average ties

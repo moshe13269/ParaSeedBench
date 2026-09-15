@@ -1,0 +1,26 @@
+{
+  "images": 1536,
+  "labeling": "two independent atomic annotations followed by blinded adjudication",
+  "paper_minimum_scenes_per_category": 4,
+  "sampling": "equal number of scenes/category; all wordings, seeds, and models; no automatic pass/fail stratification",
+  "scene_ids": [
+    "main_color_binding_000",
+    "main_color_binding_003",
+    "main_color_binding_009",
+    "main_color_binding_013",
+    "main_count_010",
+    "main_count_016",
+    "main_count_020",
+    "main_count_022",
+    "main_existence_002",
+    "main_existence_011",
+    "main_existence_013",
+    "main_existence_023",
+    "main_spatial_000",
+    "main_spatial_008",
+    "main_spatial_011",
+    "main_spatial_017"
+  ],
+  "scenes_per_category": 4,
+  "seed": 2027
+}

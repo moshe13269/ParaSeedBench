@@ -1,0 +1,3 @@
+# Install a CUDA-enabled PyTorch build first; see README.md.
+-e .[test]
+
