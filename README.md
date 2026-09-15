@@ -19,11 +19,11 @@ This repository is the paper-aligned v0.3.0 release. It contains:
 The published main run contains 11,520 images: 96 scenes × 5 prompts × 8 seeds ×
 3 pipelines. The human-primary audit contains 1,536 images: 16 complete scenes ×
 4 equivalent wordings × 8 seeds × 3 pipelines. Model weights and generated PNGs
-are intentionally not committed.
+are not committed to Git; the images are hosted separately (see below).
 
 ## Generated images and results
 
-The generated images and result CSV files are available on Google Drive:
+The generated images and full result CSV files are available on Google Drive:
 
 **[ParaSeedBench images and results (Google Drive)](https://drive.google.com/drive/folders/1UBvSSBTKIDd0iMSFtz2bXAFKuAkM4Esu?usp=sharing)**
 
@@ -282,7 +282,8 @@ docs/                    annotation, Git upload, and historical notes
 ## Citation and license
 
 Citation metadata is in [CITATION.cff](CITATION.cff). The authors are Moshe Laufer
-and Noam Koenigstein, Tel Aviv University.
+(Tel Aviv University), Oren Barkan (The Open University of Israel), and Noam
+Koenigstein (Tel Aviv University).
 
 No software/data license was selected on the authors' behalf. Before making the
 Git repository public, replace [LICENSE_NOTICE.md](LICENSE_NOTICE.md) with the

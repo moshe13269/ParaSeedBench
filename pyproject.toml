@@ -10,6 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10,<3.13"
 authors = [
   {name = "Moshe Laufer"},
+  {name = "Oren Barkan"},
   {name = "Noam Koenigstein"},
 ]
 keywords = ["text-to-image", "robustness", "prompt paraphrase", "random seed", "evaluation"]

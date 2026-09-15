@@ -2,8 +2,9 @@
 \usepackage{spconf,amsmath,amssymb,booktabs,graphicx,microtype,url}
 \usepackage[hidelinks]{hyperref}
 \title{ParaSeedBench: Wording, Seed, and Finite-Grid Nonadditivity in Text-to-Image Evaluation}
-\name{Moshe Laufer \qquad Noam Koenigstein}
-\address{Tel Aviv University, Tel Aviv, Israel}
+\name{Moshe Laufer$^{1}$, Oren Barkan$^{2}$, Noam Koenigstein$^{1}$}
+\address{$^{1}$Tel Aviv University, Tel Aviv, Israel \qquad
+$^{2}$The Open University of Israel}
 \newcommand{\E}{\mathbb{E}}
 \newcommand{\q}{\boldsymbol{q}}
 \newcommand{\normk}[1]{\lVert #1\rVert_K^2}
@@ -145,7 +146,7 @@ Intervals use 2,000 scene-bootstrap replicates within category with equal catego
 \section{Limitations and Conclusion}
 The suite measures simple, templated photographic compositions rather than unrestricted intent. Meaning equivalence was author-designed but not independently validated. Components depend on the selected wording/seed set, and one observation per cell precludes separating latent interaction from residual variation. Primary labels retain human subjectivity; adjudication was not a third independent rating. The audit samples only 16 scenes. Category comparisons of joint accuracy are additionally entangled with one to four required atoms per scene. Safety behavior differs by pipeline, and equal output resolution is not equal native capability. No claim of novelty over existing paraphrase benchmarks follows from dataset size or a crossed table alone.
 
-ParaSeedBench partitions observed semantic variation on a crossed wording--seed grid while keeping correctness explicit. The human-primary audit shows that evaluator choice can materially shift both success rates and apparent instability. The benchmark therefore treats adjudicated human states as primary evidence and full-suite automatic scoring as a reproducible secondary diagnostic. The release supplies frozen prompts, seeds, provenance checks, audited labels, and restoration tools.
+ParaSeedBench partitions observed semantic variation on a crossed wording--seed grid while keeping correctness explicit. The human-primary audit shows that evaluator choice can materially shift both success rates and apparent instability. The benchmark therefore treats adjudicated human states as primary evidence and full-suite automatic scoring as a reproducible secondary diagnostic. The \href{https://github.com/moshe13269/ParaSeedBench}{public release} supplies code and audited evidence; its \href{https://drive.google.com/drive/folders/1UBvSSBTKIDd0iMSFtz2bXAFKuAkM4Esu?usp=sharing}{read-only archive} contains all 11,520 images and full results.
 
 \section{Compliance with Ethical Standards}
 OpenAI ChatGPT assisted with language editing, \LaTeX{} preparation, and portions of release-code drafting and review. It was neither an evaluated generator nor used to produce or adjudicate human labels. The authors designed and ran the study, verified the code, analyses, results, and citations, and take responsibility for the manuscript.
