@@ -13,9 +13,11 @@ authors:
   - family-names: Koenigstein
     given-names: Noam
     affiliation: Tel Aviv University
+    orcid: "https://orcid.org/0000-0001-8219-4512"
   - family-names: Barkan
     given-names: Oren
     affiliation: The Open University of Israel
+    orcid: "https://orcid.org/0000-0002-5059-0905"
 keywords:
   - text-to-image generation
   - robustness evaluation
