@@ -6,7 +6,7 @@ protocol uses four wordings and eight shared seeds per scene, reports correctnes
 alongside finite-grid wording, seed, and nonadditive-residual components, and
 supports crash-safe restart.
 
-This repository is the paper-aligned v0.3.0 release. It contains:
+This repository is the paper-aligned v0.0.0 release. It contains:
 
 - the 96-scene main suite, 16-scene development suite, and four-scene smoke suite;
 - every fixed seed and immutable Hugging Face model revision;
